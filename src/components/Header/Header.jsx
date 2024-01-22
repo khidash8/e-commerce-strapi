@@ -10,6 +10,8 @@ import Cart from "../Cart/Cart";
 
 const Header = () => {
   const [scrolling, setScrolling] = useState(false);
+  const [showCart, setShowCart] = useState(false);
+  const [searchModal, setSearchModal] = useState(false);
 
   const handleScrolling = useCallback(() => {
     if (window.scrollY > 100) {
@@ -24,24 +26,28 @@ const Header = () => {
   }, [handleScrolling]);
 
   return (
-    <header className={`main-header ${scrolling ? "sticky-header" : ""}`}>
-      <div className="header-content">
-        <ul className="left">
-          <li>Home</li>
-          <li>About</li>
-          <li>Categories</li>
-        </ul>
-        <div className="center">APECART</div>
-        <div className="right">
-          <TbSearch />
-          <AiOutlineHeart />
-          <span className="cart-icon">
-            <CgShoppingCart />
-            <span>5</span>
-          </span>
+    <>
+      <header className={`main-header ${scrolling ? "sticky-header" : ""}`}>
+        <div className="header-content">
+          <ul className="left">
+            <li>Home</li>
+            <li>About</li>
+            <li>Categories</li>
+          </ul>
+          <div className="center">APECART</div>
+          <div className="right">
+            <TbSearch onClick={() => setSearchModal(true)} />
+            <AiOutlineHeart />
+            <span className="cart-icon">
+              <CgShoppingCart onClick={() => setShowCart(true)} />
+              <span>5</span>
+            </span>
+          </div>
         </div>
-      </div>
-    </header>
+      </header>
+      {showCart && <Cart setShowCart={setShowCart} />}
+      {searchModal && <Search setSearchModal={setSearchModal} />}
+    </>
   );
 };
 
