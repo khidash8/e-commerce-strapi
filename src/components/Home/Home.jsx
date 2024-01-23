@@ -1,27 +1,44 @@
-import { useEffect } from "react";
+import { useCallback, useContext, useEffect } from "react";
 import Products from "../Products/Products";
 import Banner from "./Banner/Banner";
 import Category from "./Category/Category";
 import "./Home.scss";
 import { fetchDataFromAPI } from "../../utils/Api";
+import { Context } from "../../utils/AppContext";
 
 const Home = () => {
+  // ! context api
+  const { categories, setCategories, products, setProducts } =
+    useContext(Context);
+
+  // ! get all the categories
+  const getCategories = useCallback(() => {
+    fetchDataFromAPI("/api/categories?populate=*").then((res) => {
+      return setCategories(res.data);
+    });
+  }, [setCategories]);
+
+  // ! get all the products
+  const getProducts = useCallback(() => {
+    fetchDataFromAPI("/api/products?populate=*").then((res) => {
+      return setProducts(res.data);
+    });
+  }, [setProducts]);
+
+  // ! render products and categories while Home is mounted
   useEffect(() => {
     getCategories();
-  }, []);
+    getProducts();
+  }, [getCategories, getProducts]);
 
-  const getCategories = async () => {
-    const data = await fetchDataFromAPI("/api/categories?populate=*");
-    console.log(data);
-  };
-
+  // ! render
   return (
     <div className="home">
       <Banner />
       <div className="main-content">
         <div className="layout">
-          <Category />
-          <Products />
+          <Category categories={categories} />
+          <Products products={products} />
         </div>
       </div>
     </div>
