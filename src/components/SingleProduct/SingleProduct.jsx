@@ -1,6 +1,8 @@
 import "./SingleProduct.scss";
 import RelatedProducts from "./RelatedProducts/RelatedProducts";
 import ProdImg from "../../assets/products/headphone-prod-3.webp";
+import { useParams } from "react-router-dom";
+import useFetch from "../../hooks/useFetch";
 
 import {
   FaFacebookF,
@@ -10,28 +12,49 @@ import {
   FaPinterest,
   FaCartPlus,
 } from "react-icons/fa";
+import { useState } from "react";
 
 const SingleProduct = () => {
+  const [quantity, setQuantity] = useState(1);
+  const { id } = useParams();
+  const { data } = useFetch(`/api/products?populate=*&[filters][id]=${id}`);
+
+  if (!data) return;
+
+  const product = data[0]?.attributes;
+
+  // ? event handlers
+  const handleIncrement = () => {
+    setQuantity((prev) => (prev < 5 ? prev + 1 : prev));
+  };
+
+  const handleDecrement = () => {
+    setQuantity((prev) => (prev >= 2 ? prev - 1 : prev));
+  };
+
   return (
     <div className="single-product-main-content">
       <div className="layout">
         <div className="single-product-page">
           <div className="left">
-            <img src={ProdImg} alt="" />
+            <img
+              src={
+                process.env.REACT_APP_DEV_URL +
+                product.img.data[0].attributes.url
+              }
+              alt=""
+            />
           </div>
           <div className="right">
-            <span className="name">title</span>
-            <span className="price">&#8377;299</span>
-            <span className="desc">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit.
-              Cupiditate officiis, modi magnam ab sequi possimus!
-            </span>
+            <span className="name">{product.title}</span>
+            <span className="price">&#8377;{product.price}</span>
+            <span className="desc">{product.desc}</span>
 
             <div className="cart-buttons">
               <div className="quantity-buttons">
-                <span>-</span>
-                <span>1</span>
-                <span>+</span>
+                <span onClick={handleDecrement}>-</span>
+                <span>{quantity}</span>
+                <span onClick={handleIncrement}>+</span>
               </div>
               <button className="add-to-cart-button">
                 <FaCartPlus size={20} />
@@ -42,7 +65,8 @@ const SingleProduct = () => {
             <span className="divider" />
             <div className="info-item">
               <span className="text-bold">
-                Category: <span>Headphones</span>
+                Category:{" "}
+                <span>{product.categories.data[0].attributes.title}</span>
               </span>
               <span className="text-bold">
                 Share:{" "}
@@ -57,7 +81,10 @@ const SingleProduct = () => {
             </div>
           </div>
         </div>
-        <RelatedProducts />
+        <RelatedProducts
+          productId={id}
+          categoryId={product.categories.data[0].id}
+        />
       </div>
     </div>
   );

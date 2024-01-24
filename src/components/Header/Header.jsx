@@ -9,6 +9,8 @@ import { Context } from "../../utils/AppContext";
 import Cart from "../Cart/Cart";
 
 const Header = () => {
+  const navigate = useNavigate();
+
   const [scrolling, setScrolling] = useState(false);
   const [showCart, setShowCart] = useState(false);
   const [searchModal, setSearchModal] = useState(false);
@@ -30,11 +32,13 @@ const Header = () => {
       <header className={`main-header ${scrolling ? "sticky-header" : ""}`}>
         <div className="header-content">
           <ul className="left">
-            <li>Home</li>
+            <li onClick={() => navigate("/")}>Home</li>
             <li>About</li>
             <li>Categories</li>
           </ul>
-          <div className="center">APECART</div>
+          <div className="center" onClick={() => navigate("/")}>
+            APECART
+          </div>
           <div className="right">
             <TbSearch onClick={() => setSearchModal(true)} />
             <AiOutlineHeart />

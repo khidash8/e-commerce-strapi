@@ -1,10 +1,13 @@
 import React from "react";
 import "./Product.scss";
 import PropTypes from "prop-types";
+import { useNavigate } from "react-router-dom";
 
 const Product = ({ id, item }) => {
+  const navigate = useNavigate();
+
   return (
-    <div className="product-card">
+    <div className="product-card" onClick={() => navigate(`/product/${id}`)}>
       <div className="thumbnail">
         <img
           src={

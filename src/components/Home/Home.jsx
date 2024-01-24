@@ -20,9 +20,11 @@ const Home = () => {
 
   // ! get all the products
   const getProducts = useCallback(() => {
-    fetchDataFromAPI("/api/products?populate=*").then((res) => {
-      return setProducts(res.data);
-    });
+    fetchDataFromAPI("/api/products?populate=*&pagination[limit]=10").then(
+      (res) => {
+        return setProducts(res.data);
+      }
+    );
   }, [setProducts]);
 
   // ! render products and categories while Home is mounted
