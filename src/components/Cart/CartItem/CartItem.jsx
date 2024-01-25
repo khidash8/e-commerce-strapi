@@ -1,6 +1,5 @@
 import { Context } from "../../../utils/AppContext";
 import { MdClose } from "react-icons/md";
-import ProdImg from "../../../assets/products/earbuds-prod-1.webp";
 import { useContext } from "react";
 import "./CartItem.scss";
 
@@ -15,8 +14,9 @@ const CartItem = () => {
           <div className="image-container">
             <img
               src={
-                process.env.REACT_APP_DEV_URL +
                 item?.attributes?.img.data[0].attributes.url
+                // process.env.REACT_APP_DEV_URL +
+                // item?.attributes?.img.data[0].attributes.url
               }
               alt=""
             />
