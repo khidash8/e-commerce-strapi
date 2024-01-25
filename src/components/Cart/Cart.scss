@@ -8,6 +8,7 @@
   z-index: 100;
   display: flex;
   justify-content: flex-end;
+  overflow-y: scroll;
 
   .opac-layer {
     background: rgba(0, 0, 0, 0.5);

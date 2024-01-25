@@ -1,6 +1,5 @@
 import "./SingleProduct.scss";
 import RelatedProducts from "./RelatedProducts/RelatedProducts";
-import ProdImg from "../../assets/products/headphone-prod-3.webp";
 import { useParams } from "react-router-dom";
 import useFetch from "../../hooks/useFetch";
 
@@ -12,12 +11,14 @@ import {
   FaPinterest,
   FaCartPlus,
 } from "react-icons/fa";
-import { useState } from "react";
+import { useState, useContext } from "react";
+import { Context } from "../../utils/AppContext";
 
 const SingleProduct = () => {
   const [quantity, setQuantity] = useState(1);
   const { id } = useParams();
   const { data } = useFetch(`/api/products?populate=*&[filters][id]=${id}`);
+  const { handleAddToCart } = useContext(Context);
 
   if (!data) return;
 
@@ -56,7 +57,13 @@ const SingleProduct = () => {
                 <span>{quantity}</span>
                 <span onClick={handleIncrement}>+</span>
               </div>
-              <button className="add-to-cart-button">
+              <button
+                className="add-to-cart-button"
+                onClick={() => {
+                  handleAddToCart(data[0], quantity);
+                  setQuantity(1);
+                }}
+              >
                 <FaCartPlus size={20} />
                 ADD TO CART
               </button>
